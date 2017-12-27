@@ -11,6 +11,20 @@ Rails.application.routes.draw do
     put '/boards/:id' => 'boards#update'
 
     delete '/boards/:id' => 'boards#destroy'
+
+    # login(Sign in) / up / Out
+    # Sign in
+    get '/signin' => 'sessions#signin'
+    post '/signin' => 'sessions#user_signin'
+
+    # Sign up
+    get '/signup' => 'sessions#signup'
+    post '/signup' => 'sessions#user_signup'
+
+    # sign Out
+    delete '/signout' => 'sessions#signout'
+
+
   end
 
 
