@@ -24,9 +24,14 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="/" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
+
+              <% if user_signed_in? %>
+                <a class="dropdown-item" href="/signout"><%= current_user.email %></a>
+                <a class="dropdown-item" href="/signout" data-method="delete" data-confirm="로그아웃 하시겠습니까?">Sign Out</a>
+              <% else %>
               <a class="dropdown-item" href="/signin">Sign In</a>
-              <!-- <a class="dropdown-item" href="/signout">Sign Out</a> -->
               <a class="dropdown-item" href="/signup">Sign Up</a>
+              <% end %>
             </div>
           </li>
         </ul>
@@ -35,7 +40,7 @@
 
   <div class="container" style="margin-top: 5rem;">
     <% if flash[:notice] %>
-   <div class="alert alert-success"><%= flash[:notice] %></div>
+   <div class="alert alert-success" ><%= flash[:notice] %></div>
  <% end %>
     <%= yield %>
   </div>
