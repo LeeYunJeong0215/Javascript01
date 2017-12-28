@@ -7,7 +7,7 @@ class BoardsController < ApplicationController
 
   def show
     @board = Board.find(params[:id])
-    @like = Like.where(user_id: current_user.id, board: @board.id)
+    @like = Like.where(user_id: current_user.id, board_id: @board.id)
   end
 
   def new
@@ -53,5 +53,14 @@ class BoardsController < ApplicationController
     )
     end
     @like = Board.find(params[:id]).likes.count
+  end
+
+  def create_comment
+    @comment = Comment.create(
+      user_id: current_user.id,
+      board_id: params[:id],
+      contents: params[:contents]
+    )
+    puts params[:contents]
   end
 end

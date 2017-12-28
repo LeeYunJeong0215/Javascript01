@@ -26,6 +26,8 @@ Rails.application.routes.draw do
 
     post '/boards/:id/like' => 'boards#like_boards'
 
+    post '/boards/:id/create_comment' => 'boards#create_comment'
+
 
   end
 

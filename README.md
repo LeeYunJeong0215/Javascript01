@@ -109,20 +109,144 @@ $ bundle install
 
 ### javascript로 페이지 동적으로 조정하기
 
-* 이벤트
+* 1. 이벤트
 
-  1. HTML element 찾기
+     1. HTML element 찾기
 
-     * document.getElementById('id')
-     * document.getElementByClassName('class')
-     * document.getElementByTagName('tag')
-     * document.getElementById('id')
+        - document.getElementById('id'): 1개(유일)
+        - document.getElementsByClassName('class'): n개(배열)
+        - document.getElementsByTagName('tag'): n개(배열)
+        - document.querySelector('css selector'): 1개(제일 첫번째)
+        - document.querySelectorAll('css selector'): n개(배열)
 
-     ​
+     2. Event Listener 설정하기
 
-     ​
+        - *HTML_element*.on이벤트명 = Handler (ex: document.onclick)
+        - *HTML_element*.addEventListener('이벤트명', Handler)
 
-  2. Event Listener 설정하기
+     3. Event Handler 선언하기
 
-  3. Event Handler 선언하기
+        - 익명함수를 선언해서 사용함
+
+        ```
+        document.addEventListener('click', function() {
+          // 실행문
+        })
+        ```
+
+
+
+
+## 20171228
+
+### jQuery
+
+* 자바스크립트 라이브러리(라이브러리란? 자주 사용하는 코드들을 재사용할 수 있는 형태로 가공해서 프로그래밍 효율을 높여주는 코드들)
+
+- DOM 탐색 및 수정
+- 이벤트
+- AJAX
+
+를 편하게 사용할 수 있음
+
+```
+$('.className') == document.getElementsByClassName
+$('#id') == document.getElementById
+$('HTMLtag') == document.getElementsByTagName
+```
+
+document가 로드되기 전에 DOM을 탐색하는 것을 막기 위해서 반드시 모든 자바스크립트 코드를 `function() {}`로 감싸줘야함
+
+```
+<script>
+  $(function) {
+    // 실행문
+  }
+  혹은
+  $(document).ready(function() {
+    
+  })
+</script>
+```
+
+#### ajax로 좋아요 구현하기
+
+좋아요를 구현하기 위해 `User`와 `Board` 모델을 n:n으로 연결하는 조인테이블을 만들어줘야 함
+
+```
+$ rails g model like
+```
+
+*db/migrate/current_time_create_like.rb*
+
+```
+class CreateLikes < ActiveRecord::Migration
+  def change
+    create_table :likes do |t|
+      t.integer :board_id
+      t.integer :user_id
+      t.timestamps null: false
+    end
+  end
+end
+```
+
+*app/models/like.rb*
+
+```
+class Like < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :board
+end
+```
+
+*app/models/user.rb*
+
+```
+[...]
+has_many :likes
+```
+
+*app/models/board.rb*
+
+```
+[...]
+has_many :likes
+```
+
+*config/routes.rb*
+
+```
+[...]
+# Like
+  post '/boards/:id/like' => 'boards#like_board'
+```
+
+*app/controllers/boards_controller.rb*
+
+```
+  def like_board
+    user_like = Like.where(user_id: current_user.id, board_id: params[:id])
+    if user_like.count > 0
+      user_like.first.destroy
+    else
+      Like.create(
+        user_id: current_user.id,
+        board_id: params[:id]
+      )
+    end
+    @like = Board.find(params[:id]).likes.count
+  end
+```
+
+좋아요를 처음 눌렀을 때와 이미 눌렸을 때를 따로 처리하기 위해서 분기문으로 작성한다.
+
+ajax로 들어온 요청에 대한 응답은 해당 컨트롤러의 이름을 가진 `js.erb`파일이다. view파일이 있는 *app/views/boards*폴더에 `like_board.js.erb`파일을 만든다.
+
+1. application.js에 jquery가 이미 존재하므로 따로 설치해줄 것은 없음.
+
+```javascript
+//= require jquery
+//= require jquery_ujs
+```
 

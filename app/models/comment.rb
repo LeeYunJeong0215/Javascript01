@@ -1,3 +1,4 @@
 class Comment < ActiveRecord::Base
-  belong_to :comment
+  belongs_to :user
+  belongs_to :board
 end

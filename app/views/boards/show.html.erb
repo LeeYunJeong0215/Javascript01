@@ -13,6 +13,33 @@
   </button>
 <% end %>
 <a href="/" class="btn btn-outline-success"><i class="fas fa-home"></i> 홈으로 </a>
+<button type="button" class="btn btn-outline-warning">
+  <i class="fas fa-exchange-alt"></i> 수정하기
+</button>
+<button type="button" class="btn btn-outline-danger">
+  <i class="far fa-trash-alt"></i></i> 삭제하기
+</button>
+<form class="form-inline" id="comment-form">
+  <i class="fab fa-replyd fa-3x"></i>
+    <textarea id="comment" placeholder="Comments"></textarea>
+    <button type="submit" class="btn btn-info create-comment">댓글달기</button>
+</form>
+
+<table class="table">
+   <tbody class="comment-list">
+    <% @board.comments.reverse.each do |comment| %>
+    <tr>
+      <td><%= comment.contents %></td>
+      <td><button type="button" class="btn btn-warning">
+          <i class="far fa-trash-alt"></i></i> 수정
+      </button></td>
+      <td><button type="button" class="btn btn-danger">
+          <i class="far fa-trash-alt"></i></i> 삭제
+      </button></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
 <script>
   $(function(){
     //1. 좋아요 버튼을 클릭하면
@@ -20,8 +47,27 @@
       $.ajax({
         url: "/boards/<%= @board.id %>/like",
         method: 'POST'
-      });
+    });
+  });
+  // 1. 댓글 달기 버튼을 누르면
+    // 1-1. 댓글 form이 제출(submit)되면
+  $('#comment-form').on('submit', function(event){
+    event.preventDefault();
+    //2. input안에 들어있는 내용을 찾아서
+    var c = $('#comment').val();
+    // 3. 서버에 보내준다.
+    $.ajax({
+      url: "/boards/<%= @board.id%>/create_comment",
+      method: "POST",
+      data:{
+        contents: c
+      }
+    });
+  })
+})
 
-  });
-  });
+//댓글달기 (ajax)
+//1. 댓글 달기 버튼을 누르면
+//1.1 댓글 form이 제출(submit)되면
+
 </script>
