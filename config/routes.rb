@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     # sign Out
     delete '/signout' => 'sessions#signout'
 
+    post '/boards/:id/like' => 'boards#like_boards'
+
 
   end
 

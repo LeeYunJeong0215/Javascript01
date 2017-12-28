@@ -7,6 +7,7 @@ class BoardsController < ApplicationController
 
   def show
     @board = Board.find(params[:id])
+    @like = Like.where(user_id: current_user.id, board: @board.id)
   end
 
   def new
@@ -39,5 +40,18 @@ class BoardsController < ApplicationController
     @board = Board.find(params[:id])
     @board.destroy
     redirect_to "/"
+  end
+
+  def like_boards
+    user_like = Like.where(user_id: current_user.id, board_id: params[:id])
+    if user_like.count > 0
+      user_like.first.destroy
+    else
+      Like.create(
+        user_id: current_user.id,
+        board_id: params[:id]
+    )
+    end
+    @like = Board.find(params[:id]).likes.count
   end
 end

@@ -1,0 +1,14 @@
+// if(this.classList.contains('btn-outline-primary')){
+//
+//   //2.1 좋아요 카운트를 1 증가시킨다.
+//   $('#like-count').html(parseInt($('#like-count').html())+1);
+// }else{
+//   //2.2 좋아요 카운트를 1 감소시킨다.
+//   $('#like-count').text(parseInt($('#like-count').html())-1);
+// }
+// //3. 버튼의 색깔이 좋아요 상태일때와 좋아요를 누른 상태가 아닐때 토글해서 바뀜.
+////
+// //4.
+// });
+$('#like').toggleClass('btn-primary').toggleClass('btn-outline-primary')
+$('#like-count').text(<%= @like %>);
