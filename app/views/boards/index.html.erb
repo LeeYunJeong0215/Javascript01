@@ -10,7 +10,7 @@
     <% @boards.each do |board| %>
     <tr class="board" data-value="<%= board.id %>">
       <td><%= board.id %></td>
-      <td class="title"><%= board.title %></td>
+      <td class="title" data-id="<%= board.id %>"><%= board.title %></td>
 
     </tr>
     <% end %>
@@ -19,30 +19,49 @@
 
 
 <a href="/boards/new" class="btn btn-warning" >새글쓰기</a>
-<button type="button" class="btn btn-info" >제목바꾸기</button>
-<button type="button" class="btn btn-danger color-btn">빨강</button>
-<button type="button" class="btn btn-primary color-btn">파랑</button>
-<button type="button" class="btn btn-success color-btn">초록</button>
+<button type="button" class="btn btn-info change-title" >제목바꾸기</button>
+<button type="button" class="btn btn-danger color-btn" data-class="text-danger">빨강</button>
+<button type="button" class="btn btn-primary color-btn" data-class="text-primary">파랑</button>
+<button type="button" class="btn btn-success color-btn" data-class="text-success">초록</button>
 
-<script>
-//table의 한 줄을 클릭했을 경우에 해당 글의 show페이지로 이동
-//1. table의 각 줄을 찾는다.
-var boards= document.getElementsByClassName('board');
-
-for(var i=0; i<boards.length; i++){
-  //2. 각 줄을 순회하며 이벤트 리스너를 달아준다.
-  boards[i].addEventListener("click", function(){
-    //3. 해당 줄이 몇번째 글인지 파악한다(id파악)
-    //getAttribte는 내가 지정한 속성명의 속성값을 가져온다.
-    //<태그명 속성명="속성값"></태그명>
-    var id = this.getAttribute('data-value'); //this는 내가 이벤트를 발생시킨 위치라고 생각하면 쉽다.
-    //4. 파악한 id에 해당하는 글로 이동한다.
-    location.href = "/boards/" + id;
-  })
-}
-</script>
 
 <!-- 외부의 자바스크립트 소스 가져오기 -->
 <!-- 원래 폴더가 아니라 public폴더가 기본 폴더가 되므로 여기에 파일을 만들어서 붙여넣어야 함. -->
 <!-- <script src="./title.js "> </script> -->
 <!-- <script src="./title.js "> </script> -->
+
+<script>
+  $(document).ready(function(){ //jQuery를 쓸때는 꼭 document 라이브러리를 불러오고 나서 써야 한다.
+    //1. 마우스 오버를 하면
+      //1-1. 버튼을 찾아서
+      //1-2. 버튼에 마우스 오버시 이벤트를 달아준다.
+      $('.color-btn').on('mouseover', function(){ //= $('.color-btn').on('mouseover', function(){
+        // console.log($(this));
+        var textStyle = $(this).data("class"); // = $(this)).attr("data-class"
+        $('.table').toggleClass(textStyle);
+
+      });
+      // 마우스를 땔 경우 이벤트
+      $('.color-btn').on('mouseout', function(){//= $('.color-btn').on('mouseover', function(){
+        // console.log($(this));
+        $('.table').toggleClass($(this).data("class"));
+      });
+
+
+      // 테이블 한 줄 클릭시 show페이지로 이동하기
+
+      //1. td에 해당하는 부분을 클릭하면
+      $('.title').on('click', function(){
+          //2. td 속성에 있는 data-id의 속성값을 가져와서
+          //3. 페이지를 이동시킴
+          location.href = "/boards/" + $(this).data('id');
+      });
+
+
+
+
+
+
+  });
+
+</script>

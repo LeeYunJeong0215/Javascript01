@@ -96,3 +96,33 @@ $ bundle install
 ### 로그인할때
 
 * 비밀번호가 틀렸거나 이메일 틀렸을 때 알려주기(만약 둘 중에 무엇이 틀렸는지 알려주는 사이트가 있다면 보안이 취약하다고 생각하면 된다.)
+
+
+
+### javascript
+
+* 동적? 이미 서버로부터 받아온 html구조, 내용물을 사용자가/개발자가 원하는 형태로 바꿔준다.
+* 이벤트? 사용자의 행동(클릭, 스크롤 등)
+* html element? 
+
+
+
+### javascript로 페이지 동적으로 조정하기
+
+* 이벤트
+
+  1. HTML element 찾기
+
+     * document.getElementById('id')
+     * document.getElementByClassName('class')
+     * document.getElementByTagName('tag')
+     * document.getElementById('id')
+
+     ​
+
+     ​
+
+  2. Event Listener 설정하기
+
+  3. Event Handler 선언하기
+
