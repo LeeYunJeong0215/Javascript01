@@ -63,4 +63,10 @@ class BoardsController < ApplicationController
     )
     puts params[:contents]
   end
+
+  def destroy_comment
+    @comment = Comment.find(params[:comment_id]).destroy
+    puts "#{params[:comment_id]}번 댓글 삭제"
+  end
+
 end

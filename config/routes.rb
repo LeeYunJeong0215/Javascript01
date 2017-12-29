@@ -24,10 +24,12 @@ Rails.application.routes.draw do
     # sign Out
     delete '/signout' => 'sessions#signout'
 
+
     post '/boards/:id/like' => 'boards#like_boards'
 
     post '/boards/:id/create_comment' => 'boards#create_comment'
 
+    delete 'boards/:id/comments/:comment_id' => 'boards#destroy_comment'
 
   end
 

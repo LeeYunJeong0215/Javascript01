@@ -12,6 +12,7 @@
   <i class="fas fa-thumbs-up"></i> 좋아요 (<span id="like-count"><%= @board.likes.count %></span>)
   </button>
 <% end %>
+
 <a href="/" class="btn btn-outline-success"><i class="fas fa-home"></i> 홈으로 </a>
 <button type="button" class="btn btn-outline-warning">
   <i class="fas fa-exchange-alt"></i> 수정하기
@@ -19,21 +20,28 @@
 <button type="button" class="btn btn-outline-danger">
   <i class="far fa-trash-alt"></i></i> 삭제하기
 </button>
-<form class="form-inline" id="comment-form">
-  <i class="fab fa-replyd fa-3x"></i>
-    <textarea id="comment" placeholder="Comments"></textarea>
-    <button type="submit" class="btn btn-info create-comment">댓글달기</button>
-</form>
+
+<form class="form-inline mt-3 mb-2" id="comment-form">
+   <div class="form-group col-10">
+    <div class="form-group col-1">
+    <i class="fab fa-replyd fa-3x"></i>
+    </div>
+    <input type="text" class="form-control" id="comment" placeholder="Comments" style="width: 90% !important;">
+  </div>
+  <div class="form-group col-2">
+    <button type="submit" class="btn btn-primary create-comment"><i class="fas fa-comments"></i>댓글달기</button>
+  </div>
+  </form>
 
 <table class="table">
    <tbody class="comment-list">
     <% @board.comments.reverse.each do |comment| %>
-    <tr>
+    <tr id="comment-<%= comment.id %>">
       <td><%= comment.contents %></td>
-      <td><button type="button" class="btn btn-warning">
+      <td><button type="button" class="btn btn-warning edit-comment">
           <i class="far fa-trash-alt"></i></i> 수정
       </button></td>
-      <td><button type="button" class="btn btn-danger">
+      <td><button type="button" class="btn btn-danger destroy-comment" data-id="<%= comment.id %>">
           <i class="far fa-trash-alt"></i></i> 삭제
       </button></td>
     </tr>
@@ -66,8 +74,22 @@
   })
 })
 
-//댓글달기 (ajax)
-//1. 댓글 달기 버튼을 누르면
-//1.1 댓글 form이 제출(submit)되면
 
+//댓글 삭제
+  //1. 댓글에 있는 삭제 버튼을 누르면
+  $(document).on('click', '.destroy-comment', function(){
+      var id = $(this).data('id');
+      if(confirm("이 댓글을 삭제하시겠습니까?")){
+      //2. 해당 댓글에 대한 삭제 요청을 서버로 보내고
+      $.ajax({
+        url: `/boards/<%= @board.id %>/comments/${id}`,
+        method: 'DELETE'
+      })
+    }
+  })
+
+
+
+//3. 서버에 있는 DB에 삭제한 이후에
+//4. 해당 HTML Element를 삭제한다
 </script>
