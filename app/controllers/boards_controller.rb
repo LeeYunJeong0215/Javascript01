@@ -69,4 +69,8 @@ class BoardsController < ApplicationController
     puts "#{params[:comment_id]}번 댓글 삭제"
   end
 
+  def update_comment
+    puts params[:contents]
+    Comment.find(params[:comment_id]).update(contents: params[:contents])
+  end
 end

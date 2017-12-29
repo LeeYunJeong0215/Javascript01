@@ -38,7 +38,7 @@
     <% @board.comments.reverse.each do |comment| %>
     <tr id="comment-<%= comment.id %>">
       <td><%= comment.contents %></td>
-      <td><button type="button" class="btn btn-warning edit-comment">
+      <td><button type="button" class="btn btn-warning edit-comment" data-id="<%= comment.id %>">
           <i class="far fa-trash-alt"></i></i> 수정
       </button></td>
       <td><button type="button" class="btn btn-danger destroy-comment" data-id="<%= comment.id %>">
@@ -88,8 +88,66 @@
     }
   })
 
+// 댓글 수정
+// 1. 수정 버튼을 누르면
+$(document).on('click', '.edit-comment', function(){
+  var comment =($($(this).parent().siblings()[0]));
+  //2. 댓글이 출력되는 부분을 input태그로 바꿔주고
+  var td = $(this).parents('.comment-list').find('.edit-comment-form');
+  //댓글 하나를 수정 중에 다른 댓글은 수정이 불가능하도록 하기 위한 if문
+  if (td.length > 0){
+    // alert("다른 input창이 열려 있습니다");
+    //td.each(function(){
+      alert("다른 수정창이 열려 있습니다");
+      return false;
+    //   var id = $(this).
+    //   $($(this).parent().siblings()[0]).replaceWith(`
+    //     <td><button type="button" class="btn btn-warning edit-comment" data-id="${id}">
+    //       <i class="far fa-trash-alt"></i></i> 수정
+    //   </button></td>
+    //     `);
+    //   $.ajax({
+    //     url: `/boards/<%= @board.id %>/comments/${id}`,
+    //     method: 'PUT',
+    //     data: {
+    //       contents: q
+    //     }
+    //     })
+    //   $(this).replaceWith($(this).val());
+    //
+    // })
+  }
+
+  var q = comment[0].textContent; //댓글 출력부분을 q변수로 받아준 후
+  var id = $(this).data('id')
+  comment.replaceWith(`<td>
+    <input type="text" value="${q}" class="form-control edit-comment-form" >
+    </td>`);
+    //3. 수정버튼(=this)은 완료버튼으로 바꿔주고
+    $(this).replaceWith(`<button type="button" class="btn btn-outline-warning update-comment" data-id="${id}">
+          <i class="far fa-trash-alt"></i></i> 완료
+          </button>`)
+})
+//4. 완료버튼을 누르면 input 태그를 다시 td태그로 바꾸고
+$(document).on('click','.update-comment',function(){
+  var q = $('.edit-comment-form').val(); //98줄에서 댓글수정부분의 내용을 불러옴.
+  var id = $(this).data('id');
+  $($(this).parent().siblings()[0]).replaceWith(`
+    <td>${q}</td>`);
+  $(this).replaceWith(`
+      <button type="button" class="btn btn-warning edit-comment" data-id="${id}">
+        <i class="far fa-trash-alt"></i> 수정
+      </button>`);
+//5. 해당 내용을 서버로 전송합니다.
+$.ajax({
+  url: `/boards/<%= @board.id %>/comments/${id}`,
+  method: 'PUT',
+  data: {
+    contents: q
+  }
+  })
+
+})
 
 
-//3. 서버에 있는 DB에 삭제한 이후에
-//4. 해당 HTML Element를 삭제한다
 </script>

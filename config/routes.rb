@@ -31,6 +31,8 @@ Rails.application.routes.draw do
 
     delete 'boards/:id/comments/:comment_id' => 'boards#destroy_comment'
 
+    put '/boards/:id/comments/:comment_id' => 'boards#update_comment'
+
   end
 
 
